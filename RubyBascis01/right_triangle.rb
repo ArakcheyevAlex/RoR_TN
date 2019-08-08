@@ -27,4 +27,3 @@ else
 end
 
 puts "Triangle is #{kind_of_triangle}"
-
