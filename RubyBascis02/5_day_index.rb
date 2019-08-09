@@ -13,12 +13,8 @@ month = gets.chomp.to_i
 puts "Enter day:"
 day = gets.chomp.to_i
 
-if leap_year?(year)
-  number_of_days[1] = 29 
-end
+number_of_days[1] = 29 if leap_year?(year)
 
-day_index = day
-
-days_per_month[0...month - 1].each { |days_count| day_index += days_count}
+day_index = days_per_month.take(month - 1).sum + day
 
 puts "Day number in the year: #{day_index}"

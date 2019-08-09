@@ -13,9 +13,6 @@ days_per_month = {
   december: 31
 }
 
-days_per_month.select { |month, days_count|
-  days_count == 30
-}.
-each { |month, days_count|
-   puts month
+days_per_month.each{ |month, days_count|
+  puts month if days_count == 30
 }

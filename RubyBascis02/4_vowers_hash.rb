@@ -1,11 +1,11 @@
 vowers = {}
 
-alphabet = 'a'.upto('z').to_a
+alphabet = ('a'..'z').to_a
 
-alphabet.each { |letter|
+alphabet.each do |letter|
   if letter =~ /[aeiou]/ 
     vowers[letter] = alphabet.index(letter) + 1
   end
-}
+end
 
 puts vowers
