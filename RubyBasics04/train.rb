@@ -46,14 +46,6 @@ class Train
     @route.previous_station(@current_station)
   end
 
-  def go_to_station(station)
-    if station != @current_station
-      @current_station.remove_train(self)
-      @current_station = station
-      @current_station.receive_train(self)
-    end
-  end
-
   def go_to_next_station
     go_to_station(next_station)
   end
@@ -61,4 +53,15 @@ class Train
   def go_to_previous_station
     go_to_station(previous_station)
   end
+
+  private
+
+  def go_to_station(station)
+    if station != @current_station 
+      @current_station.remove_train(self)
+      @current_station = station
+      @current_station.receive_train(self)
+    end
+  end
+
 end
