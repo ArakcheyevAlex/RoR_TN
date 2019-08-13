@@ -6,7 +6,7 @@ class Route
   end
 
   def add_station(station)
-    @stations_list.insert(-2, station) if !@stations_list.include?(station)
+    @stations_list.insert(-2, station) unless @stations_list.include?(station)
   end
 
   def delete_station(station)
@@ -26,17 +26,12 @@ class Route
   def next_station(station)
     return station if station == @stations_list.last
 
-    return @stations_list[@stations_list.index(station) + 1]
+    @stations_list[@stations_list.index(station) + 1]
   end
 
   def previous_station(station)
     return station if station == @stations_list.first
 
-    return @stations_list[@stations_list.index(station) - 1]
+    @stations_list[@stations_list.index(station) - 1]
   end
-
-
-
-
-
 end
