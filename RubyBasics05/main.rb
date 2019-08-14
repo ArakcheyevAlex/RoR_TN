@@ -41,7 +41,7 @@ def choose_station(prefix = '')
   
   puts "Station '#{station_name}' not found" unless station
   
-  return station, station_name
+  [station, station_name]
 end
 
 def choose_route
@@ -57,7 +57,7 @@ def choose_route
 
   puts "Route '#{route_name}' not found" unless route
 
-  return route, route_name
+  [route, route_name]
 end
 
 def choose_train
@@ -73,7 +73,7 @@ def choose_train
 
   puts "Train #{train_number} not found" unless train
 
-  return train, train_number
+  [train, train_number]
 end
 
 def create_station
@@ -249,7 +249,7 @@ def show_stations_list
   puts "Stations list:"
   print_separator
   
-  Station.stations_list.each {|station| puts station.name}
+  Station.stations_list.each {|station_name, stations| puts station_name}
 end
 
 def show_trains_on_station

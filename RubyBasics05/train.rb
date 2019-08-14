@@ -2,14 +2,11 @@ class Train
   attr_reader :number, :type, :speed, :wagons, :current_station, :route
 
   def self.find_by_number(number)
-    @@trains.each do |train| 
-      return train if train.number == number
-    end
-    nil
+    @@trains[number]
   end
 
   def initialize(number, type)
-    if type != :cargo && type != :passenger 
+    unless [:cargo, :passenger].include?(type)
       raise ArgumentError.new("Type must be only :cargo or :passenger") 
     end
 
@@ -17,7 +14,7 @@ class Train
     @type = type
     @wagons = []
     @speed = 0
-    @@trains << self
+    @@trains[number] = self
   end
 
   def speed_up(value = 100)
@@ -78,7 +75,13 @@ class Train
   end
 
   protected
-  # go_to_station в protected чтобы нельзя было поместить поезд на произвольную станцию
+  #
+  # go_to_station в protected чтобы нельзя было поместить 
+  # поезд на произвольную станцию
+  # 
+  # @@trains для того чтобы снаружи нельзя было добавить или удалить поезд
+  # из списка поездов.
+  #
 
   def go_to_station(station)
     if station != @current_station 
@@ -88,6 +91,6 @@ class Train
     end
   end
 
-  @@trains = []
+  @@trains = {}
 
 end

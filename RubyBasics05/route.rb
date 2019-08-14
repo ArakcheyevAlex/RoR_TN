@@ -2,16 +2,13 @@ class Route
   attr_reader :stations_list, :name
 
   def self.find_by_name(name)
-    @@routes.each do |route| 
-      return route if route.name == name
-    end
-    nil
+    @@routes[name]
   end
 
   def initialize(name, first_station, last_station)
     @name = name
     @stations_list = [first_station, last_station]
-    @@routes << self
+    @@routes[name] = self
   end
 
   def add_station(station)
@@ -50,6 +47,6 @@ class Route
 
   protected
   
-  @@routes = []
+  @@routes = {}
 
 end
