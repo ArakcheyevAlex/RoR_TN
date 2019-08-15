@@ -184,7 +184,7 @@ class UserInterface
     
     if train.type == :cargo
       new_wagon = CargoWagon.new()
-    elsif train.type == :cargo
+    elsif train.type == :passenger
       new_wagon = PassengerWagon.new()
     else
       puts "Incorrect train type"
