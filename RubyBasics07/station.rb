@@ -1,7 +1,9 @@
 require './instance_counter'
+require './validator'
 
 class Station
   include InstanceCounter
+  include Validator
 
   attr_reader :trains, :name
 
@@ -20,6 +22,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     @@stations[name] = self
     register_instance
   end
@@ -37,6 +40,10 @@ class Station
   end
 
   protected
+
+  def validate!
+    raise ArgumentError.new("Name can't be nil") if @name.nil?
+  end
   
   @@stations = {}
 

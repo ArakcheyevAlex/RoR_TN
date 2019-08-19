@@ -1,7 +1,9 @@
 require './instance_counter'
+require './validator'
 
 class Route
   include InstanceCounter
+  include Validator
 
   attr_reader :stations_list, :name
 
@@ -12,6 +14,7 @@ class Route
   def initialize(name, first_station, last_station)
     @name = name
     @stations_list = [first_station, last_station]
+    validate!
     @@routes[name] = self
     register_instance
   end
@@ -22,7 +25,7 @@ class Route
 
   def delete_station(station)
     if @stations_list.first == station || @stations_list.last == station
-      puts "Can't delete first or last station in the route"
+      raise "Can't delete first or last station in the route"
     else
       @stations_list.delete(station)
     end
@@ -52,6 +55,12 @@ class Route
 
   protected
   
+  def validate!
+    raise ArgumentError.new("Name can't be nil") if @name.nil?
+    raise ArgumentError.new("First station can't be nil") if @stations_list[0].nil?
+    raise ArgumentError.new("Last station can't be nil") if @stations_list[-1].nil?
+  end
+
   @@routes = {}
 
 end

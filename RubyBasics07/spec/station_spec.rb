@@ -7,12 +7,16 @@ describe Station do
 
   before(:all) do
     @station_ny = Station.new("New York")    
-    @passenger_train = PassengerTrain.new("001")
-    @cargo_train = CargoTrain.new("002")
+    @passenger_train = PassengerTrain.new("001-df")
+    @cargo_train = CargoTrain.new("002-dd")
   end
   
   it 'create station' do
     expect(@station_ny.name).to eq "New York"
+  end
+
+  it 'check for valid' do
+    expect(@station_ny.valid?).to be true
   end
 
   it 'check that trains list is empty' do

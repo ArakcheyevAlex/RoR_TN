@@ -1,8 +1,13 @@
 require './manufacturer'
+require './validator'
 
 class Train
   include Manufacturer
+  include Validator
 
+  TRAIN_TYPES = [:cargo, :passenger]
+  NUMBER_FORMAT = /^[a-z|\d]{3}-?[a-z|\d]{2}$/i
+  
   attr_reader :number, :type, :speed, :wagons, :current_station, :route
 
   class << self
@@ -15,14 +20,11 @@ class Train
   end  
 
   def initialize(number, type)
-    unless [:cargo, :passenger].include?(type)
-      raise ArgumentError.new("Type must be only :cargo or :passenger") 
-    end
-
     @number = number
     @type = type
     @wagons = []
     @speed = 0
+    validate!
     @@trains[number] = self
   end
 
@@ -84,19 +86,19 @@ class Train
   end
 
   protected
-  #
-  # go_to_station в protected чтобы нельзя было поместить 
-  # поезд на произвольную станцию
-  # 
-  # @@trains для того чтобы снаружи нельзя было добавить или удалить поезд
-  # из списка поездов.
-  #
 
   def go_to_station(station)
     if station != @current_station 
       @current_station.remove_train(self)
       @current_station = station
       @current_station.receive_train(self)
+    end
+  end
+
+  def validate!
+    raise ArgumentError.new("Invalid number foramt") unless @number =~ NUMBER_FORMAT
+    unless TRAIN_TYPES.include?(type)
+      raise ArgumentError.new("Type must be only :cargo or :passenger") 
     end
   end
 

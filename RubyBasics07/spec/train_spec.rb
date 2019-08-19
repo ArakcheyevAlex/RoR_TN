@@ -11,8 +11,8 @@ describe Train do
     @station_la = Station.new("Los Angeles")
     @station_chicago = Station.new("Chicago")
     
-    @passenger_train = PassengerTrain.new("001")
-    @cargo_train = CargoTrain.new("002")
+    @passenger_train = PassengerTrain.new("001-ff")
+    @cargo_train = CargoTrain.new("002-dd")
   
     @route_ny_la = Route.new("NY to LA", @station_ny, @station_la)
     @route_ny_la.add_station(@station_chicago)
@@ -23,12 +23,17 @@ describe Train do
   end
 
   it "worng type train creatiion" do
-    expect { Train.new("001", :some_type) }.to raise_error(ArgumentError, "Type must be only :cargo or :passenger")
+    expect { Train.new("001-ff", :some_type) }.to raise_error(ArgumentError, "Type must be only :cargo or :passenger")
   end
 
   it 'find a train' do
-    expect(Train.find('001')).to eq(@passenger_train)
-    expect(Train.find_by_number('002')).to eq(@cargo_train)
+    expect(Train.find('001-ff')).to eq(@passenger_train)
+    expect(Train.find_by_number('002-dd')).to eq(@cargo_train)
+  end
+
+  it 'check for valid' do
+    expect(@passenger_train.valid?).to be true
+    expect(@cargo_train.valid?).to be true
   end
 
   it "train speeds up" do

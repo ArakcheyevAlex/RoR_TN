@@ -96,14 +96,18 @@ class UserInterface
 
     case type
     when :passenger
-      PassengerTrain.new(train_number)
-      puts "Train '#{train_number}' was created"
+      new_train = PassengerTrain.new(train_number)
     when :cargo
-      CargoTrain.new(train_number)
+      new_train = CargoTrain.new(train_number)
       puts "Train '#{train_number}' was created"
     else
-      puts "ERROR: Incorrect train type"
+      raise ArgumentError, "Incorrect train type"
+      return
     end
+    puts "Train '#{train_number}' was created" if new_train.valid?
+  rescue ArgumentError => e
+    puts "Error while train creation: #{e.message}"
+    retry
   end
 
   def manage_routes

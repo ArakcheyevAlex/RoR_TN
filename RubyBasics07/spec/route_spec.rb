@@ -29,4 +29,8 @@ describe Route do
     expect(@route_ny_la.next_station(@station_chicago)).to eq(@station_la)
     expect(@route_ny_la.previous_station(@station_chicago)).to eq(@station_ny)
   end
+
+  it 'check for valid' do
+    expect(@route_ny_la.valid?).to be true
+  end
 end
