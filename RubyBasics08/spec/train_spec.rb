@@ -4,6 +4,9 @@ require './passenger_train'
 require './station'
 require './route'
 require './wagon'
+require './cargo_wagon'
+require './passenger_wagon'
+
 
 describe Train do
   before(:all) do
@@ -17,9 +20,9 @@ describe Train do
     @route_ny_la = Route.new("NY to LA", @station_ny, @station_la)
     @route_ny_la.add_station(@station_chicago)
 
-    @cargo_wagon = Wagon.new(:cargo)
-    @passenger_wagon = Wagon.new(:passenger)
-    @passenger_wagon2 = Wagon.new(:passenger)
+    @cargo_wagon = CargoWagon.new(100)
+    @passenger_wagon = PassengerWagon.new(50)
+    @passenger_wagon2 = PassengerWagon.new(50)
   end
 
   it "worng type train creatiion" do

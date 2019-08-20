@@ -5,10 +5,14 @@ class UserInterface
     print "\n"
   end
 
+  def double_separator
+    print_separator
+    yield
+    print_separator
+  end
+
   def show_main_menu
-    print_separator
-    puts "What do you want to do? (enter the number):"
-    print_separator
+    double_separator { puts "What do you want to do? (enter the number):" }
 
     puts "1. Create station"
     puts "2. Create train"
@@ -19,6 +23,8 @@ class UserInterface
     puts "7. Move train to next or previous station"
     puts "8. Show stations list"
     puts "9. Show trains on the station"
+    puts "10. Show train`s wagons list"
+    puts "11. Load wagon"
     puts "0. Exit"
     print_separator
   end
@@ -71,6 +77,22 @@ class UserInterface
     [train, train_number]
   end
 
+  def choose_wagon
+    puts "Enter wagon number:"
+    wagon_number = gets.chomp.to_s
+    
+    if wagon_number.empty? 
+      puts "ERROR: Wagon number is incorrect"
+      return
+    end
+
+    wagon = Wagon.find_by_number(wagon_number)
+
+    puts "Wagon #{wagon_number} not found" unless wagon
+
+    [wagon, wagon_number]
+  end
+
   def create_station
     station, station_name = choose_station
     
@@ -99,7 +121,6 @@ class UserInterface
       new_train = PassengerTrain.new(train_number)
     when :cargo
       new_train = CargoTrain.new(train_number)
-      puts "Train '#{train_number}' was created"
     else
       raise ArgumentError, "Incorrect train type"
       return
@@ -186,17 +207,25 @@ class UserInterface
     train, train_number = choose_train
     return unless train
     
+    puts "Enter wagon`s capacity"
+    capacity = gets.chomp.to_i
+    if capacity <= 0
+      puts "Invalid capacity"
+      return
+    end
+
     if train.type == :cargo
-      new_wagon = CargoWagon.new()
+      new_wagon = CargoWagon.new(capacity)
     elsif train.type == :passenger
-      new_wagon = PassengerWagon.new()
+      new_wagon = PassengerWagon.new(capacity)
     else
       puts "Incorrect train type"
       return
     end
 
     train.add_wagon(new_wagon)
-    puts "Wagon number #{new_wagon.number} was added to train #{train_number}" 
+    puts "Wagon №#{new_wagon.number} (cap: #{new_wagon.capacity}, type: #{new_wagon.type}) created" 
+    puts "Wagon №#{new_wagon.number} was added to train #{train_number}" 
   end
 
   def remove_wagon
@@ -268,13 +297,36 @@ class UserInterface
       return
     end
 
-    puts "Trains on station #{station.name}:"
-    print_separator
-    
-    station.trains.each do |train| 
-      route_description = train.has_route? ? train.route.description : 'Unknown'
-      puts "Train number #{train.number} (Route #{route_description})"
-    end
+    double_separator { puts "Trains on station #{station.name}:" }
+    station.trains_each { |train| puts train.short_description }
+  end
+
+  def show_train_wagons_list
+    train, train_number = choose_train
+    return unless train
+
+    double_separator { puts train.description }
+    train.wagons_each { |wagon| puts wagon.description }
+  end
+
+  def load_wagon
+    wagon, _ = choose_wagon
+    return unless wagon
+
+    puts wagon.description
+
+    if wagon.type == :passenger
+      wagon.take_place
+    elsif wagon.type == :cargo
+      puts "Enter value to load"
+      value = gets.chomp.to_i
+      wagon.load_wagon(value)
+    else
+      puts "ERROR: Incorrect wagon type"
+      return
+    end      
+    puts "Wagon loaded."
+    puts wagon.description
   end
 
   def run
@@ -302,6 +354,10 @@ class UserInterface
         show_stations_list
       when 9
         show_trains_on_station
+      when 10
+        show_train_wagons_list
+      when 11
+        load_wagon
       when 0
         break
       else

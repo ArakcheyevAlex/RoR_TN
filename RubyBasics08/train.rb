@@ -11,7 +11,6 @@ class Train
   attr_reader :number, :type, :speed, :wagons, :current_station, :route
 
   class << self
-
     def find_by_number(number)
       @@trains[number]
     end
@@ -26,6 +25,14 @@ class Train
     @speed = 0
     validate!
     @@trains[number] = self
+  end
+
+  def description
+    "##{@number}:: type: #{@type}, route: #{ @route ? @route.description : 'N/A' }"
+  end
+
+  def short_description
+    "##{@number}:: type: #{@type}, wagons count: #{wagons_count}"
   end
 
   def speed_up(value = 100)
@@ -85,6 +92,10 @@ class Train
     go_to_station(previous_station)
   end
 
+  def wagons_each
+    @wagons.each { |wagon| yield(wagon) }
+  end
+
   protected
 
   def go_to_station(station)
@@ -103,5 +114,4 @@ class Train
   end
 
   @@trains = {}
-
 end

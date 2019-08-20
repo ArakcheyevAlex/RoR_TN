@@ -39,6 +39,10 @@ class Station
     @trains.select { |train| train.type == type }
   end
 
+  def trains_each
+    @trains.each { |train| yield(train) }
+  end
+
   protected
 
   def validate!
@@ -46,5 +50,4 @@ class Station
   end
   
   @@stations = {}
-
 end
