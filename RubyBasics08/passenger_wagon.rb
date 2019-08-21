@@ -6,6 +6,6 @@ class PassengerWagon < Wagon
   end
 
   def take_place
-  	load_wagon
+    load_wagon
   end
 end

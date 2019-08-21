@@ -18,6 +18,13 @@ describe Wagon do
     expect(@passenger_wagon.valid?).to be true
   end
 
+  it 'find a wagon' do
+    expect(Wagon.find(@cargo_wagon.number)).to eq(@cargo_wagon)
+    expect(Wagon.find_by_number(@passenger_wagon.number)).to(
+      eq(@passenger_wagon)
+    )
+  end
+
   it 'wagon capacity' do
     expect(@cargo_wagon.capacity).to eq(100)
     expect(@passenger_wagon.capacity).to eq(50)
@@ -40,13 +47,17 @@ describe Wagon do
   it 'overload of passenger wagon' do
     49.times { @passenger_wagon.take_place }
     expect(@passenger_wagon.available).to eq(0)
-    expect { @passenger_wagon.take_place }.to raise_error(RuntimeError, "No free space")
+    expect { @passenger_wagon.take_place }.to(
+      raise_error(RuntimeError, 'No free space')
+    )
   end
 
   it 'overload of cargo wagon' do
     @cargo_wagon.load_wagon(50)
     expect(@cargo_wagon.available).to eq(10)
-    expect { @cargo_wagon.load_wagon(20)}.to raise_error(RuntimeError, "No free space")
+    expect { @cargo_wagon.load_wagon(20) }.to(
+      raise_error(RuntimeError, 'No free space')
+    )
   end
 
 end

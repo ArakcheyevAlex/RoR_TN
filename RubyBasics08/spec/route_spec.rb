@@ -1,17 +1,17 @@
-#require './train'
+# require './train'
 require './station'
 require './route'
 
 describe Route do
   before(:all) do
-    @station_ny = Station.new("New York")
-    @station_la = Station.new("Los Angeles")
-    @station_chicago = Station.new("Chicago")
-    
-    #@passengers_train = Train.new("001", :passengers )
-    #@cargo_train = Train.new("002", :cargo )
-  
-    @route_ny_la = Route.new("NY to LA", @station_ny, @station_la)
+    @station_ny = Station.new('New York')
+    @station_la = Station.new('Los Angeles')
+    @station_chicago = Station.new('Chicago')
+
+    # @passengers_train = Train.new("001", :passengers )
+    # @cargo_train = Train.new("002", :cargo )
+
+    @route_ny_la = Route.new('NY to LA', @station_ny, @station_la)
   end
 
   it 'creates new route' do

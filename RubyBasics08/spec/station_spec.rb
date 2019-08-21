@@ -4,15 +4,14 @@ require './cargo_train'
 require './passenger_train'
 
 describe Station do
-
   before(:all) do
-    @station_ny = Station.new("New York")    
-    @passenger_train = PassengerTrain.new("001-df")
-    @cargo_train = CargoTrain.new("002-dd")
+    @station_ny = Station.new('New York')
+    @passenger_train = PassengerTrain.new('001-df')
+    @cargo_train = CargoTrain.new('002-dd')
   end
-  
+
   it 'create station' do
-    expect(@station_ny.name).to eq "New York"
+    expect(@station_ny.name).to eq 'New York'
   end
 
   it 'check for valid' do

@@ -5,18 +5,18 @@ class Train
   include Manufacturer
   include Validator
 
-  TRAIN_TYPES = [:cargo, :passenger]
-  NUMBER_FORMAT = /^[a-z|\d]{3}-?[a-z|\d]{2}$/i
-  
+  TRAIN_TYPES = [:cargo, :passenger].freeze
+  NUMBER_FORMAT = /^[a-z|\d]{3}-?[a-z|\d]{2}$/i.freeze
+
   attr_reader :number, :type, :speed, :wagons, :current_station, :route
 
   class << self
     def find_by_number(number)
       @@trains[number]
     end
-  
-    alias_method :find, :find_by_number
-  end  
+
+    alias find find_by_number
+  end
 
   def initialize(number, type)
     @number = number
@@ -28,7 +28,8 @@ class Train
   end
 
   def description
-    "##{@number}:: type: #{@type}, route: #{ @route ? @route.description : 'N/A' }"
+    route_description = @route ? @route.description : 'N/A'
+    "##{@number}:: type: #{@type}, route: #{route_description}"
   end
 
   def short_description
@@ -44,7 +45,7 @@ class Train
   end
 
   def stopped?
-    @speed == 0
+    @speed.zero?
   end
 
   def wagons_count
@@ -56,23 +57,23 @@ class Train
   end
 
   def add_wagon(wagon)
-    raise ArgumentError.new('Incorrect wagon type') unless wagon.type == @type
+    raise ArgumentError, 'Incorrect wagon type' unless wagon.type == @type
 
     @wagons << wagon if stopped? && !@wagons.include?(wagon)
   end
 
   def remove_wagon(wagon)
-    @wagons.delete(wagon)    
+    @wagons.delete(wagon)
   end
 
-  def set_route(route)
-    @current_station.remove_train(self) if @current_station
+  def assign_route(route)
+    @current_station&.remove_train(self)
     @route = route
     @current_station = @route.stations_list.first
     @current_station.receive_train(self)
   end
 
-  def has_route?
+  def route?
     !@route.nil?
   end
 
@@ -99,17 +100,18 @@ class Train
   protected
 
   def go_to_station(station)
-    if station != @current_station 
-      @current_station.remove_train(self)
-      @current_station = station
-      @current_station.receive_train(self)
-    end
+    return if station == @current_station
+
+    @current_station.remove_train(self)
+    @current_station = station
+    @current_station.receive_train(self)
   end
 
   def validate!
-    raise ArgumentError.new("Invalid number foramt") unless @number =~ NUMBER_FORMAT
+    raise ArgumentError, 'Invalid number format' unless @number =~ NUMBER_FORMAT
+
     unless TRAIN_TYPES.include?(type)
-      raise ArgumentError.new("Type must be only :cargo or :passenger") 
+      raise ArgumentError, 'Type must be only :cargo or :passenger'
     end
   end
 

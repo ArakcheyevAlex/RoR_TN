@@ -16,7 +16,7 @@ class Station
       @@stations
     end
 
-    alias_method :all, :stations_list
+    alias all stations_list
   end
 
   def initialize(name)
@@ -46,8 +46,8 @@ class Station
   protected
 
   def validate!
-    raise ArgumentError.new("Name can't be nil") if @name.nil?
+    raise ArgumentError, "Name can't be nil" if @name.nil?
   end
-  
+
   @@stations = {}
 end

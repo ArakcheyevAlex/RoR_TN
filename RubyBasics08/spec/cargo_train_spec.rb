@@ -1,15 +1,15 @@
 require './cargo_train'
 
-describe CargoTrain do  
+describe CargoTrain do
   before(:all) do
-    @cargo_train = CargoTrain.new("004-aa")
+    @cargo_train = CargoTrain.new('004-aa')
   end
 
-  it "create cargo train with correct type" do
+  it 'create cargo train with correct type' do
     expect(@cargo_train.type).to eq(:cargo)
   end
 
   it 'check for valid' do
-  	expect(@cargo_train.valid?).to be true
+    expect(@cargo_train.valid?).to be true
   end
 end

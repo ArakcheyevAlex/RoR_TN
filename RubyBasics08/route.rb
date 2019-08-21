@@ -24,11 +24,11 @@ class Route
   end
 
   def delete_station(station)
-    if @stations_list.first == station || @stations_list.last == station
+    if [@stations_list.first, @stations_list.last].include?(station)
       raise "Can't delete first or last station in the route"
-    else
-      @stations_list.delete(station)
     end
+
+    @stations_list.delete(station)
   end
 
   def show_stations_list
@@ -50,17 +50,17 @@ class Route
   end
 
   def description
-    "Name: #{name}, from: #{@stations_list.first.name}, to: #{@stations_list.last.name}"
+    "Name: #{name}, from: #{@stations_list.first.name}," \
+    " to: #{@stations_list.last.name}"
   end
 
   protected
-  
+
   def validate!
-    raise ArgumentError.new("Name can't be nil") if @name.nil?
-    raise ArgumentError.new("First station can't be nil") if @stations_list[0].nil?
-    raise ArgumentError.new("Last station can't be nil") if @stations_list[-1].nil?
+    raise ArgumentError, "Name can't be nil" if @name.nil?
+    raise ArgumentError, "First station can't be nil" if @stations_list[0].nil?
+    raise ArgumentError, "Last station can't be nil" if @stations_list[-1].nil?
   end
 
   @@routes = {}
-
 end

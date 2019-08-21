@@ -5,7 +5,7 @@ class Wagon
   include Manufacturer
   include Validator
 
-  WAGON_TYPES = [:cargo, :passenger]
+  WAGON_TYPES = [:cargo, :passenger].freeze
 
   attr_reader :number, :type, :capacity, :occupied, :wagons
 
@@ -13,9 +13,9 @@ class Wagon
     def find_by_number(number)
       @@wagons[number]
     end
-  
-    alias_method :find, :find_by_number
-  end  
+
+    alias find find_by_number
+  end
 
   def available
     @capacity - @occupied
@@ -23,17 +23,19 @@ class Wagon
 
   def load_wagon(value = 1)
     raise 'No free space' if @occupied + value > @capacity
+
     @occupied += value
   end
 
   def description
-    "##{number}, #{type}, capacity: #{capacity}, available: #{available}, occupied: #{occupied}"
+    "##{number}, #{type}, capacity: #{capacity}" \
+    "available: #{available}, occupied: #{occupied}"
   end
 
   protected
 
   @@wagon_number_sequence = 0
-  
+
   def initialize(type, capacity)
     @type = type
     @capacity = capacity
@@ -45,11 +47,15 @@ class Wagon
   end
 
   def validate!
-  	unless WAGON_TYPES.include?(type)
-      raise ArgumentError.new("Type must be only :cargo or :passenger") 
+    unless WAGON_TYPES.include?(type)
+      raise ArgumentError, 'Type must be only :cargo or :passenger'
     end
-    raise ArgumentError.new("Number can't be nil") if @number.nil?
-    raise ArgumentError.new("Capacity can't be 0 or nil") if @capacity.nil? || @capacity == 0 
+
+    raise ArgumentError, "Number can't be nil" if @number.nil?
+
+    if @capacity.nil? || @capacity.zero?
+      raise ArgumentError, "Capacity can't be 0 or nil"
+    end
   end
 
   @@wagons = {}
