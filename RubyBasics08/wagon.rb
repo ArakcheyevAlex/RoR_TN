@@ -53,9 +53,11 @@ class Wagon
 
     raise ArgumentError, "Number can't be nil" if @number.nil?
 
+    # rubocop:disable Style/GuardClause
     if @capacity.nil? || @capacity.zero?
       raise ArgumentError, "Capacity can't be 0 or nil"
     end
+    # rubocop:enable Style/GuardClause
   end
 
   @@wagons = {}

@@ -59,5 +59,4 @@ describe Wagon do
       raise_error(RuntimeError, 'No free space')
     )
   end
-
 end

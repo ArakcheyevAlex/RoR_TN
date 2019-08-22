@@ -110,9 +110,11 @@ class Train
   def validate!
     raise ArgumentError, 'Invalid number format' unless @number =~ NUMBER_FORMAT
 
+    # rubocop:disable Style/GuardClause
     unless TRAIN_TYPES.include?(type)
       raise ArgumentError, 'Type must be only :cargo or :passenger'
     end
+    # rubocop:enable Style/GuardClause
   end
 
   @@trains = {}
