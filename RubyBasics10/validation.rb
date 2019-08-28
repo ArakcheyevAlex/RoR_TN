@@ -30,10 +30,6 @@ module Validation
 
     private
 
-    def variable(name)
-      instance_variable_get("@#{name}".to_sym)
-    end
-
     # rubocop:disable Style/GuardClause
     def validation_rule_presence(attr_name, _)
       unless instance_variable_get("@#{attr_name}")
