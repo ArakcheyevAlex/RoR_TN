@@ -1,13 +1,17 @@
 require './manufacturer'
-require './validator'
+require './validation'
 
 class Wagon
   include Manufacturer
-  include Validator
+  include Validation
 
   WAGON_TYPES = [:cargo, :passenger].freeze
 
   attr_reader :number, :type, :capacity, :occupied, :wagons
+
+  validate :number, :presence
+  validate :type, :allowed_values, WAGON_TYPES
+  validate :capacity, :presence
 
   class << self
     def find_by_number(number)
@@ -44,20 +48,6 @@ class Wagon
     validate!
     @@wagon_number_sequence += 1
     @@wagons[@number] = self
-  end
-
-  def validate!
-    unless WAGON_TYPES.include?(type)
-      raise ArgumentError, 'Type must be only :cargo or :passenger'
-    end
-
-    raise ArgumentError, "Number can't be nil" if @number.nil?
-
-    # rubocop:disable Style/GuardClause
-    if @capacity.nil? || @capacity.zero?
-      raise ArgumentError, "Capacity can't be 0 or nil"
-    end
-    # rubocop:enable Style/GuardClause
   end
 
   @@wagons = {}

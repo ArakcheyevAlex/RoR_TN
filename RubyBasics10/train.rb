@@ -1,14 +1,21 @@
 require './manufacturer'
-require './validator'
+require './validation'
+require './accessors'
 
 class Train
   include Manufacturer
-  include Validator
+  include Validation
+  extend Accessors
 
   TRAIN_TYPES = [:cargo, :passenger].freeze
   NUMBER_FORMAT = /^[a-z|\d]{3}-?[a-z|\d]{2}$/i.freeze
 
   attr_reader :number, :type, :speed, :wagons, :current_station, :route
+
+  attr_accessor_with_history :color
+
+  validate :number, :format, NUMBER_FORMAT
+  validate :type, :allowed_values, TRAIN_TYPES
 
   class << self
     def find_by_number(number)
@@ -105,16 +112,6 @@ class Train
     @current_station.remove_train(self)
     @current_station = station
     @current_station.receive_train(self)
-  end
-
-  def validate!
-    raise ArgumentError, 'Invalid number format' unless @number =~ NUMBER_FORMAT
-
-    # rubocop:disable Style/GuardClause
-    unless TRAIN_TYPES.include?(type)
-      raise ArgumentError, 'Type must be only :cargo or :passenger'
-    end
-    # rubocop:enable Style/GuardClause
   end
 
   @@trains = {}

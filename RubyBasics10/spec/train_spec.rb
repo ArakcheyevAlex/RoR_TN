@@ -26,7 +26,7 @@ describe Train do
 
   it 'worng type train creatiion' do
     expect { Train.new('001-ff', :some_type) }.to(
-      raise_error(ArgumentError, 'Type must be only :cargo or :passenger')
+      raise_error(ArgumentError)
     )
   end
 

@@ -1,11 +1,13 @@
 require './instance_counter'
-require './validator'
+require './validation'
 
 class Station
   include InstanceCounter
-  include Validator
+  include Validation
 
   attr_reader :trains, :name
+
+  validate :name, :presence
 
   class << self
     def find_by_name(name)
@@ -41,12 +43,6 @@ class Station
 
   def trains_each
     @trains.each { |train| yield(train) }
-  end
-
-  protected
-
-  def validate!
-    raise ArgumentError, "Name can't be nil" if @name.nil?
   end
 
   @@stations = {}

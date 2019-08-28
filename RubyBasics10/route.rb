@@ -1,11 +1,13 @@
 require './instance_counter'
-require './validator'
+require './validation'
 
 class Route
   include InstanceCounter
-  include Validator
+  include Validation
 
   attr_reader :stations_list, :name
+
+  validate :name, :presence
 
   def self.find_by_name(name)
     @@routes[name]
@@ -52,14 +54,6 @@ class Route
   def description
     "Name: #{name}, from: #{@stations_list.first.name}," \
     " to: #{@stations_list.last.name}"
-  end
-
-  protected
-
-  def validate!
-    raise ArgumentError, "Name can't be nil" if @name.nil?
-    raise ArgumentError, "First station can't be nil" if @stations_list[0].nil?
-    raise ArgumentError, "Last station can't be nil" if @stations_list[-1].nil?
   end
 
   @@routes = {}
